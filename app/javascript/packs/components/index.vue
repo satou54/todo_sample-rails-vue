@@ -14,9 +14,9 @@
     <!-- リスト表示部分 -->
     <div>
       <ul class="collection">
-        <li v-for="task in filteredTasks" v-bind:key="task.id" v-bind:id="'row_task_' + task.id" class="collection-item">
+        <li v-for="task in filteredTasksNotIsDone" v-bind:key="task.id" v-bind:id="'row_task_' + task.id" class="collection-item">
           <label v-bind:for="'task_' + task.id">
-            <input type="checkbox" v-bind:id="'task_' + task.id" />
+            <input type="checkbox" v-on:change="doneTask(task.id)" v-bind:id="'task_' + task.id" />
             <span>{{ task.name }}</span>
           </label>
         </li>
@@ -27,7 +27,7 @@
     <!-- 完了済みタスク一覧 -->
     <div id="finished-tasks" class="display_none">
       <ul class="collection">
-        <li v-for="task in filteredTasks" v-bind:key="task.id" v-bind:id="'row_task_' + task.id" class="collection-item">
+        <li v-for="task in filteredTasksIsDone" v-bind:key="task.id" v-bind:id="'row_task_' + task.id" class="collection-item">
           <label v-bind:for="'task_' + task.id">
             <input type="checkbox" v-bind:id="'task_' + task.id" />
             <span>{{ task.name }}</span>
@@ -73,10 +73,30 @@
         }, (error) => {
           console.error(error);
         });
+      },
+      doneTask: function(task_id) {
+        axios.put('/api/tasks/' + task_id, { task: { id_done: 1 } }).then((response) => {
+          this.moveFinishedTask(task_id);
+        }, (error) => {
+          console.error(error);
+        })
+      },
+      moveFinishedTask: function(task_id) {
+        var el = document.querySelector('#row_task_' + task_id);
+        var el_clone = el.cloneNode(true);
+        el.classList.add('display_none');
+        el_clone.getElementsByTagName('input')[0].checked = 'checked';
+        el_clone.getElementsByTagName('label')[0].classList.add('line-through');
+        el_clone.getElementsByTagName('label')[0].classList.remove('word-color-black');
+        var li = document.querySelector('#finished-tasks > ul > li:first-child');
+        document.querySelector('#finished-tasks > ul').insertBefore(el_clone, li);
       }
     },
     computed: {
-      filteredTasks() {
+      filteredTasksIsDone() {
+        return this.tasks.filter(task => task.isDone)
+      },
+      filteredTasksNotIsDone() {
         return this.tasks.filter(task => !task.isDone)
       }
     }
