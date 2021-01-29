@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   get "contact", to: "home#inex"
 
   namespace :api, format: "json" do
-    resources :tasks, only: [:index, :create, :update]
+    resources :tasks, only: %i[index create update]
   end
 end
