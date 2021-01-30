@@ -6,7 +6,7 @@
         <input v-model="newTask" class="form-control" placeholder="Add your tasks!!">
       </div>
       <div class="col s2 m1">
-        <div v-on:click="createTask" class="btn-floating waves-effect waves-light red">
+        <div v-on:click="createTask" class="btn-floating waves-effect waves-light red" id="add">
           <i class="material-icons">add</i>
         </div>
       </div>
@@ -29,7 +29,7 @@
       <ul class="collection">
         <li v-for="task in filteredTasksIsDone" v-bind:key="task.id" v-bind:id="'row_task_' + task.id" class="collection-item">
           <label v-bind:for="'task_' + task.id">
-            <input type="checkbox" v-bind:id="'task_' + task.id" />
+            <input type="checkbox" v-bind:id="'task_' + task.id" checked="checked" />
             <span>{{ task.name }}</span>
           </label>
         </li>
@@ -132,5 +132,9 @@
     background-color: white;
     color: black;
     border-color: black;
+  }
+
+  #add {
+    margin-top: 3px;
   }
 </style>
