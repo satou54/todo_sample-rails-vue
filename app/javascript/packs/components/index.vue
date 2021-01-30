@@ -74,12 +74,12 @@
           console.error(error);
         });
       },
-      doneTask: function(task_id) {
-        axios.put('/api/tasks/' + task_id, { task: { id_done: 1 } }).then((response) => {
+      doneTask: function (task_id) {
+        axios.put('/api/tasks/' + task_id, { task: { is_done: 1 } }).then((response) => {
           this.moveFinishedTask(task_id);
         }, (error) => {
-          console.error(error);
-        })
+          console.log(error);
+        });
       },
       moveFinishedTask: function(task_id) {
         var el = document.querySelector('#row_task_' + task_id);
@@ -94,10 +94,10 @@
     },
     computed: {
       filteredTasksIsDone() {
-        return this.tasks.filter(task => task.isDone)
+        return this.tasks.filter(task => task.is_done)
       },
       filteredTasksNotIsDone() {
-        return this.tasks.filter(task => !task.isDone)
+        return this.tasks.filter(task => !task.is_done)
       }
     }
   }
@@ -107,10 +107,30 @@
   [v-cloak] {
     display: none;
   }
+  .margin-default {
+    margin-top: 30px;
+  }
+  .padding-default {
+    padding-left: 20px;
+  }
+  .word-color-black {
+    color: #000000;
+  }
+  .collection-item:hover {
+    background-color: #ddd;
+  }
   .display_none {
     display:none;
   }
   .line-through {
     text-decoration: line-through;
+  }
+  .btn-custom {
+    text-transform: none;
+    padding: 0 10px;
+    font-size: 0.8rem;
+    background-color: white;
+    color: black;
+    border-color: black;
   }
 </style>
